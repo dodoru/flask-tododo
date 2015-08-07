@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+
+{% block content %}
+<form action="/login" method="post">
+    <label for="name-id">用户名</label>
+    <input id="name-id" type="text" name="username">
+    <br>
+    <br>
+    <label for="password-id">密&nbsp&nbsp&nbsp&nbsp码</label>
+    <input id="password-id" type="password" name="password">
+    <br>
+    <br>
+    <button type="submit">确定</button>
+</form>
+
+{% endblock %}
+
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>sign</title>
+</head>
+<body>
+{% block content %}
+<form action="/sign" method="post">
+    <label for="username">用户名</label>
+    <input id="username" type="text" name="username">
+    <br>
+    <br>
+    <label for="email">注册邮箱</label>
+    <input id="email" type="text" name="email">
+    <br>
+    <br>
+    <label for="password1">密&nbsp&nbsp&nbsp&nbsp码</label>
+    <input id="password1" type="password" name="password1">
+    <br>
+    <br>
+    <!--
+    <label for="password2">再输密码</label>
+    <input id="password2" type="password" name="password2">
+    -->
+    <label for="password">再输密码</label>
+    <input id="password" type="password" name="password">
+    <br>
+    <br>
+    <button type="submit">确定</button>
+
+    <!--
+    <script type="text/javascript">
+        <!--
+            if submit: // 如果按了确定键 （怎样写？？？）
+                if password1==password2:// 这里要怎样对比 两次密码好呢？
+                    // 填空？？？
+    </script>
+        //-->
+
+</form>
+{% endblock %}
+</body>
+</html>

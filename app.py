@@ -21,9 +21,9 @@ app.config.from_object(__name__)
 @app.route('/')
 def index():
     # user_id = request.cookies.get('user_id')
-    user_id=session.get('user_id')
+    user_id = session.get('user_id')
     # if session may not sign out.
-    print user_id,type(user_id)
+    print user_id, type(user_id)
     todos = None
     if user_id:
         todos = Todo.query.filter(Todo.user_id == int(user_id), Todo.complete == False).all()
@@ -51,7 +51,7 @@ def sign():
 
             response = make_response(redirect(url_for('index')))
             response.set_cookie('user_id', str(newUser.id))
-            session['user_id']=newUser.id
+            session['user_id'] = newUser.id
             print session
             return response
     return render_template('sign.html')
@@ -90,8 +90,8 @@ def login():
                 response = make_response(redirect(url_for('index')))
                 response.set_cookie('user_id', str(user.id))
 
-                session['user_id']=user.id
-                print "session :",session
+                session['user_id'] = user.id
+                print "session :", session
                 # print "session.SessionID ",session.SessionID
                 return response
         else:
@@ -128,7 +128,8 @@ def delete(todo_id):
 
 @app.route('/check')
 def check():
-    user_id = request.cookies.get('user_id')
+    # user_id = request.cookies.get('user_id')
+    user_id = session.get('user_id')
     todos = Todo.query.filter(Todo.user_id == int(user_id), Todo.complete == True).all()
     print todos
     return render_template('check.html', todos=todos)

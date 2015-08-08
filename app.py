@@ -5,6 +5,7 @@ from flask import flash
 from flask import redirect
 from flask import url_for
 from flask import make_response
+from flask import session
 
 import todo
 from todo import Todo, User, db
@@ -19,7 +20,10 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def index():
-    user_id = request.cookies.get('user_id')
+    # user_id = request.cookies.get('user_id')
+    user_id=session.get('user_id')
+    # if session may not sign out.
+    print user_id,type(user_id)
     todos = None
     if user_id:
         todos = Todo.query.filter(Todo.user_id == int(user_id), Todo.complete == False).all()
@@ -47,18 +51,22 @@ def sign():
 
             response = make_response(redirect(url_for('index')))
             response.set_cookie('user_id', str(newUser.id))
+            session['user_id']=newUser.id
+            print session
             return response
     return render_template('sign.html')
 
 
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
+    response = make_response(redirect(url_for('index')))
     print "log out id : ", request.cookies.get("user_id")
     print request.cookies
-    response = make_response(redirect(url_for('index')))
     # response.set_cookie('sessionID', '', expires=0)
     response.delete_cookie('user_id')
-    print request.cookies
+    session.__delitem__('user_id')
+    # print request.cookies
+    print session
     flash(' you have logged out ')
     return response
 
@@ -81,6 +89,10 @@ def login():
                 flash('log in successful.')
                 response = make_response(redirect(url_for('index')))
                 response.set_cookie('user_id', str(user.id))
+
+                session['user_id']=user.id
+                print "session :",session
+                # print "session.SessionID ",session.SessionID
                 return response
         else:
             flash('the user is not exist. ')

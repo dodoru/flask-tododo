@@ -23,6 +23,7 @@ def index():
     todos = None
     if user_id:
         todos = Todo.query.filter(Todo.user_id == int(user_id)).all()
+        print todos
     return render_template('index.html', user_id=user_id, todos=todos)
 
 
@@ -53,27 +54,36 @@ def sign():
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
     print "log out id : ", request.cookies.get("user_id")
-    # request.cookies.pop('user_id',None)
-    request.cookies.pop('user_id', None)
-    # FIXME TypeError: 'ImmutableTypeConversionDict' objects are immutable
+    print request.cookies
+    response = make_response(redirect(url_for('index')))
+    # response.set_cookie('sessionID', '', expires=0)
+    response.delete_cookie('user_id')
+    print request.cookies
     flash(' you have logged out ')
-    return redirect(url_for('index'))
+    return response
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         user_data = request.form.to_dict()
-        user = User.query.filter(User.username == user_data['username']).all()
-        print user
+        print user_data
+        query = {'username': user_data.get('username')}
+        print user_data.get('username')
+        # user=User.query.filter(**query).first()
+        # filter() got an unexpected keyword argument 'username'
+        # TypeError: filter() got an unexpected keyword argument 'username'
 
-        if user.password == user_data['password']:
-            # FIXME AttributeError: 'BaseQuery' object has no attribute 'password'
-
-            flash('log in successful.')
-            response = make_response(redirect(url_for('index')))
-            response.set_cookie('user_id', user.id)
-            return response
+        user = User.query.filter(User.username == user_data['username']).first()
+        # if all(), it will throw AttributeError: 'BaseQuery' object has no attribute 'password'
+        if user:
+            if user.password == user_data['password']:
+                flash('log in successful.')
+                response = make_response(redirect(url_for('index')))
+                response.set_cookie('user_id', str(user.id))
+                return response
+        else:
+            flash('the user is not exist. ')
     return render_template('login.html')
 
 

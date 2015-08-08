@@ -22,7 +22,7 @@ def index():
     user_id = request.cookies.get('user_id')
     todos = None
     if user_id:
-        todos = Todo.query.filter(Todo.user_id == int(user_id)).all()
+        todos = Todo.query.filter(Todo.user_id == int(user_id), Todo.complete == False).all()
         print todos
     return render_template('index.html', user_id=user_id, todos=todos)
 
@@ -105,11 +105,21 @@ def delete(todo_id):
     user_id = request.cookies.get('user_id')
     t = todo.Todo.query.get(int(todo_id))
     if t.user_id == int(user_id):
-        todo.db.session.delete(t)
+        # todo.db.session.delete(t)
+        t.complete = True
+        flash('Congratulations , you have finish this task and now you can check it . ')
         todo.db.session.commit()
     else:
         flash("sorry, you can't delete others' task... ")
     return redirect(url_for('index'))
+
+
+@app.route('/check')
+def check():
+    user_id = request.cookies.get('user_id')
+    todos = Todo.query.filter(Todo.user_id == int(user_id), Todo.complete == True).all()
+    print todos
+    return render_template('check.html', todos=todos)
 
 
 if __name__ == '__main__':

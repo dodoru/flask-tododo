@@ -19,10 +19,11 @@ class Todo(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', backref='todos')
     timestamp = db.Column(db.DateTime(timezone=True), default=sql.func.now())
+    complete = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         # str.format() is much better than '% ()'
-        return u'<ToDo , {0} , {1} , {2}>'.format(self.id, self.task, self.user_id)
+        return u'<ToDo , {0} , {1} , {2}, {3}>'.format(self.id, self.task, self.complete, self.user_id)
 
 
 class User(db.Model):
@@ -34,7 +35,7 @@ class User(db.Model):
     email = db.Column(db.String(20))
 
     def __repr__(self):
-        return u'<User , {0} , {1} , {2} , {3} >'.format(self.id, self.username, self.email, self.todos)
+        return u'<User , {0} , {1} , {2} , {3}>'.format(self.id, self.username, self.email, self.todos)
 
 
 def test():
@@ -50,10 +51,12 @@ def test():
     db.session.commit()
     print ur
     print td
+    td.complete = True
+    print td
 
 
 if __name__ == '__main__':
     db.drop_all()
     db.create_all()
     print('rebuild database')
-    # test()
+    test()

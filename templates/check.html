@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Todo</title>
+    <title>check</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <style type="text/css">
         .todo-table {
@@ -14,34 +14,13 @@
 
 <body>
 
-
-{% if not user_id %}
-<div class="headers">
-    <a href="/sign">sign</a>
-    <a href="/login">login</a>
-</div>
-{% else %}
-<a href="/check">check</a>
-<a href="/logout">sign out</a>
-{% endif %}
-
-
-<div class="center">
-    <h1>Todo</h1>
-
-    <form action={{url_for("add")}} method="post">
-        <input type="text" placeholder="Add Todo" name="todo">
-        <input class="pure-button pure-button-primary" type="submit" value="Add">
-    </form>
-</div>
-
 <table class="todo-table pure-table pure-table-horizontal pure-table-striped">
     <thead>
     <tr>
         <th>#</th>
         <th>Task</th>
         <th>Time</th>
-        <th>Action</th>
+        <th>Status</th>
         <th>Username</th>
     </tr>
     </thead>
@@ -52,15 +31,16 @@
         <td>{{ t.id }}</td>
         <td>{{ t.task }}</td>
         <td>{{ t.timestamp }}</td>
+        <td>{{ t.complete }}</td>
         <!-- use url_for()
         <td><a href={{url_for('delete', todo_id=t.id)}}>delete</a></td>
         -->
-        <td><a href={{url_for('delete', todo_id=t.id)}}>complete</a></td>
         <td>{{ t.user.username }}</td>
     </tr>
     {% endfor %}
     {% endif %}
     </tbody>
 </table>
+
 </body>
 </html>

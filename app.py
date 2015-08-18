@@ -76,7 +76,7 @@ def login():
     if request.method == 'POST':
         user_data = request.form.to_dict()
         print user_data
-        query = {'username': user_data.get('username')}
+        # query = {'username': user_data.get('username')}
         print user_data.get('username')
         # user=User.query.filter(**query).first()
         # filter() got an unexpected keyword argument 'username'
@@ -101,20 +101,24 @@ def login():
 
 @app.route('/add/', methods=['POST'])
 def add():
-    user_id = request.cookies.get('user_id')
-
-    t = request.form['todo']
-    # use unicode(), not str(), for Chinese chars
-    newTodo = todo.Todo(task=unicode(t), user_id=int(user_id))
-    todo.db.session.add(newTodo)
-    todo.db.session.commit()
-
+    user_id=session.get('user_id')
+    # user_id = request.cookies.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+    else:
+        t = request.form['todo']
+        # use unicode(), not str(), for Chinese chars
+        newTodo = todo.Todo(task=unicode(t), user_id=int(user_id))
+        todo.db.session.add(newTodo)
+        todo.db.session.commit()
     return redirect(url_for('index'))
+
 
 
 @app.route('/delete/<todo_id>/')
 def delete(todo_id):
-    user_id = request.cookies.get('user_id')
+    # user_id = request.cookies.get('user_id')
+    user_id = session.get('user_id')
     t = todo.Todo.query.get(int(todo_id))
     if t.user_id == int(user_id):
         # todo.db.session.delete(t)
@@ -130,9 +134,12 @@ def delete(todo_id):
 def check():
     # user_id = request.cookies.get('user_id')
     user_id = session.get('user_id')
-    todos = Todo.query.filter(Todo.user_id == int(user_id), Todo.complete == True).all()
-    print todos
-    return render_template('check.html', todos=todos)
+    if not user_id:
+        return redirect(url_for('login'))
+    else:
+        todos = Todo.query.filter(Todo.user_id == int(user_id), Todo.complete == True).all()
+        print todos
+        return render_template('check.html', todos=todos)
 
 
 if __name__ == '__main__':

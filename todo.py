@@ -35,7 +35,7 @@ class User(db.Model):
     email = db.Column(db.String(20))
 
     def __repr__(self):
-        return u'<User , {0} , {1} , {2} , {3}>'.format(self.id, self.username, self.email, self.todos)
+        return u'<user No:{0} , {1} , {2} , {3}>'.format(self.id, self.username, self.email, self.todos)
 
 
 def test():

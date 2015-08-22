@@ -1,26 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>login</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block head_title %}<title>login</title> {% endblock %}
 
-{% block content %}
-<form action="/login" method="post">
-    <label for="name-id">用户名</label>
-    <input id="name-id" type="text" name="username">
-    <br>
-    <br>
-    <label for="password-id">密&nbsp&nbsp&nbsp&nbsp码</label>
-    <input id="password-id" type="password" name="password">
-    <br>
-    <br>
-    <button type="submit">确定</button>
+<!--
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+<link rel="stylesheet" href="../static/css/pure-min.css"></head>
+-->
+
+{% block body_content %}
+
+<br>
+<h2 class="center"> Todo Login</h2>
+<br>
+<form action="/login" method="post" class="pure-form pure-form-aligned">
+    <div class="pure-control-group">
+        <label for="name-id">username</label>
+        <input id="name-id" type="text" name="username">
+    </div>
+    <div class="pure-control-group">
+        <label for="password-id">password</label>
+        <input id="password-id" type="password" name="password">
+    </div>
+    <div class="pure-controls">
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </div>
 </form>
-
 {% endblock %}
-
-
-</body>
-</html>

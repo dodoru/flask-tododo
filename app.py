@@ -23,7 +23,6 @@ def index():
     # user_id = request.cookies.get('user_id')
     user_id = session.get('user_id')
     # if session may not sign out.
-    print user_id, type(user_id)
     todos = None
     if user_id:
         todos = Todo.query.filter(Todo.user_id == int(user_id), Todo.complete == False).all()
@@ -35,20 +34,23 @@ def index():
 def sign():
     if request.method == 'POST':
         userdata = request.form.to_dict()
-        print "sign  userdata : ", userdata
         if len(userdata['username']) < 3:
             flash("the length of username should be more than 2 bytes. please rename.")
         elif userdata['password'] != userdata['password1']:
             flash(" Your passwords are different ,please input again.")
         else:
             # since all the conditions are suitable, we can create a new user now.
-            newUser = User(username=userdata['username'], password=userdata['password'], email=userdata['email'])
+            # newUser = User(username=userdata['username'], password=userdata['password'], email=userdata['email'])
+            del userdata['password1']
+            newUser = User(**userdata)
             todo.db.session.add(newUser)
-            todo.db.session.commit()
-            flash("you have sign in the TODO , now we will jump to your home page...")
-            print newUser
-            print newUser.id
+            try:
+                todo.db.session.commit()
+            except:
+                flash("This username is existed, please rename...")
+                todo.db.session.rollback()
 
+            flash("you have sign in the TODO , now we will jump to your home page...")
             response = make_response(redirect(url_for('index')))
             response.set_cookie('user_id', str(newUser.id))
             session['user_id'] = newUser.id
@@ -60,8 +62,6 @@ def sign():
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
     response = make_response(redirect(url_for('index')))
-    print "log out id : ", request.cookies.get("user_id")
-    print request.cookies
     # response.set_cookie('sessionID', '', expires=0)
     response.delete_cookie('user_id')
     session.__delitem__('user_id')
@@ -101,7 +101,7 @@ def login():
 
 @app.route('/add/', methods=['POST'])
 def add():
-    user_id=session.get('user_id')
+    user_id = session.get('user_id')
     # user_id = request.cookies.get('user_id')
     if not user_id:
         return redirect(url_for('login'))
@@ -112,7 +112,6 @@ def add():
         todo.db.session.add(newTodo)
         todo.db.session.commit()
     return redirect(url_for('index'))
-
 
 
 @app.route('/delete/<todo_id>/')
@@ -137,9 +136,9 @@ def check():
     if not user_id:
         return redirect(url_for('login'))
     else:
+        user = User.query.get(int(user_id))
         todos = Todo.query.filter(Todo.user_id == int(user_id), Todo.complete == True).all()
-        print todos
-        return render_template('check.html', todos=todos)
+        return render_template('check.html', todos=todos, username=user.username)
 
 
 if __name__ == '__main__':

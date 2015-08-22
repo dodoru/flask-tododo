@@ -1,20 +1,19 @@
-<html>
-<head>
-    <title>Todo</title>
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <style type="text/css">
-        .todo-table {
-        margin: 0 auto;
-        }
-        .center {
-        text-align: center;
-        }
-    </style>
-</head>
-
-<body>
-
-
+{% extends "layout.html" %}
+{% block head_title %} <title>index</title>{% endblock %}
+<!--
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+<link rel="stylesheet" href="../static/css/pure-min.css">
+<style type="text/css">
+    .todo-table {
+    margin: 0 auto;
+    }
+    .center {
+    text-align: center;
+    }
+</style>
+-->
+{% block body_content %}
+<br>
 {% if not user_id %}
 <div class="headers">
     <a href="/sign">sign</a>
@@ -24,8 +23,6 @@
 <a href="/check">check</a>
 <a href="/logout">sign out</a>
 {% endif %}
-
-
 <div class="center">
     <h1>Todo</h1>
 
@@ -34,7 +31,7 @@
         <input class="pure-button pure-button-primary" type="submit" value="Add">
     </form>
 </div>
-
+<br>
 <table class="todo-table pure-table pure-table-horizontal pure-table-striped">
     <thead>
     <tr>
@@ -62,5 +59,4 @@
     {% endif %}
     </tbody>
 </table>
-</body>
-</html>
+{% endblock %}

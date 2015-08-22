@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    {% block head_title %} {% endblock %}
+    <!--
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    -->
+    {% block static_style %}
+    <link rel="stylesheet" href="../static/css/pure-min.css">
+    <style type="text/css">
+        .todo-table {
+        margin: 0 auto;
+        }
+        .center {
+        text-align: center;
+        }
+    </style>
+    {% endblock %}
+</head>
+
+<body>
+
+{% block body_content %}{% endblock %}
+
+</body>
+</html>

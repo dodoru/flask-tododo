@@ -1,19 +1,36 @@
-<html>
-<head>
-    <title>check</title>
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <style type="text/css">
-        .todo-table {
-        margin: 0 auto;
-        }
-        .center {
-        text-align: center;
-        }
-    </style>
-</head>
+{% extends "layout.html" %}
 
-<body>
+{% block head_title %}<title>check</title> {% endblock %}
+<!--
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 
+<link rel="stylesheet" href="../static/css/pure-min.css">
+<style type="text/css">
+    .todo-table {
+    margin: 0 auto;
+    }
+    .center {
+    text-align: center;
+    }
+</style>
+-->
+
+{% block body_content %}
+
+{% if not username %}
+<div class="headers">
+    <a href="/sign">sign</a>
+    <a href="/login">login</a>
+</div>
+{% else %}
+<a href={{url_for('index')}}>index</a>
+<a href={{url_for('logout')}}>sign out</a>
+{% endif %}
+
+<br>
+<h2 class="center">* ~ completed task list ~ *</h2>
+<h4 class="center"> user : {{ username }} </h4>
+<br>
 <table class="todo-table pure-table pure-table-horizontal pure-table-striped">
     <thead>
     <tr>
@@ -21,7 +38,6 @@
         <th>Task</th>
         <th>Time</th>
         <th>Status</th>
-        <th>Username</th>
     </tr>
     </thead>
     <tbody>
@@ -32,15 +48,10 @@
         <td>{{ t.task }}</td>
         <td>{{ t.timestamp }}</td>
         <td>{{ t.complete }}</td>
-        <!-- use url_for()
-        <td><a href={{url_for('delete', todo_id=t.id)}}>delete</a></td>
-        -->
-        <td>{{ t.user.username }}</td>
     </tr>
     {% endfor %}
     {% endif %}
     </tbody>
 </table>
 
-</body>
-</html>
+{% endblock %}
